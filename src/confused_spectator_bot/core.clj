@@ -10,3 +10,5 @@
         binance-data-endpoint "/api/v3/exchangeInfo"
         url (str binance-core-addr binance-data-endpoint)]
     (json/read-str (slurp url))))
+
+
