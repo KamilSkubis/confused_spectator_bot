@@ -16,7 +16,18 @@
 (comment
 
   (def pings (mapv #(str % ping-endpoint) core-url))
+  ;;looking for best binance api server
+  (defn time-endpoints []
+    (pmap #(time (slurp %)) pings))
+  
+  "Elapsed time: 400.9164 msecs"
+  "Elapsed time: 1074.0532 msecs"
+  "Elapsed time: 1086.3397 msecs"
+  "Elapsed time: 1100.6834 msecs"
+  "Elapsed time: 1122.5045 msecs"
+  "Elapsed time: 1150.2397 msecs"
 
-(defn time-endpoints []
-  (pmap #(time (slurp %)) pings)) 
-    )
+
+  
+  
+  )
