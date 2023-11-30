@@ -2,6 +2,8 @@
   (:require [clojure.data.json :as json]
             [clj-http.client :as client]))
 
+
+
 (def core-url ["https://api.binance.com",
                "https://api-gcp.binance.com",
                "https://api1.binance.com",
@@ -46,12 +48,23 @@
   (json/read-str (:body (client/get "https://api.binance.com/api/v3/time")))
   
   
-  (defn request-klines [url symbol timeframe]
-    (str url "?symbol=" symbol "&interval=" timeframe ))
+  ;;use UpperCase for symbols
+  (defn request-klines [endpoint symbol timeframe]
+    (let [data {}
+          url (str endpoint "?symbol=" symbol "&interval=" timeframe)
+          response (client/get url)]
+      (-> data
+          (assoc :x-mbx-used-weight (get-in response [:headers "x-mbx-used-weight"])
+                 :x-mbx-used-weight-1m (get-in response [:headers "x-mbx-used-weight-1m"])
+                 :status (:status response)
+                 :body  (:body response))))
+    )
+  
+  
   
   ;;get 5m klines for ETHUSDT
-(request-klines "https://api.binance.com/api/v3/klines" "ETHUSDT" "5m" )
-
+  (def test-data (request-klines "https://api.binance.com/api/v3/klines" "ETHUSDT" "1m"))
+  
   )
 
  
