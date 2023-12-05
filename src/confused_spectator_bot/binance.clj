@@ -2,7 +2,8 @@
   (:require [clojure.data.json :as json]
             [clj-http.client :as client]))
 
-
+(def atom ({:used-weight 0
+:used-weight-1m 0 }))
 
 (def core-url ["https://api.binance.com",
                "https://api-gcp.binance.com",
@@ -60,11 +61,19 @@
                  :body  (:body response))))
     )
   
+  ;; take response body and change it to map
   
+
+   
+
+
+
   
   ;;get 5m klines for ETHUSDT
   (def test-data (request-klines "https://api.binance.com/api/v3/klines" "ETHUSDT" "1m"))
   
+
+
   )
 
  

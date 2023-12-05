@@ -5,7 +5,8 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/data.json "2.4.0"]
-                 [clj-http "3.12.3"]]
+                 [clj-http "3.12.3"]
+                 [techascent/tech.ml.dataset "7.021"]]
   :main ^:skip-aot confused-spectator-bot.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
