@@ -47,8 +47,8 @@
 
   (def test-ticker "ETHUSDT")
   (json/read-str (:body (client/get "https://api.binance.com/api/v3/time")))
-  
-  
+
+
   ;;use UpperCase for symbols
   (defn request-klines [endpoint symbol timeframe]
     (let [data {}
@@ -58,20 +58,12 @@
           (assoc :x-mbx-used-weight (get-in response [:headers "x-mbx-used-weight"])
                  :x-mbx-used-weight-1m (get-in response [:headers "x-mbx-used-weight-1m"])
                  :status (:status response)
-                 :body  (:body response))))
-    )
-  
-  ;; take response body and change it to map
-  
-
-   
+                 :body  (json/read-str (:body response) )))))
 
 
-
-  
   ;;get 5m klines for ETHUSDT
   (def test-data (request-klines "https://api.binance.com/api/v3/klines" "ETHUSDT" "1m"))
-  
+
 
 
   )
