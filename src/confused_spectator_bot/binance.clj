@@ -1,6 +1,7 @@
 (ns confused-spectator-bot.binance
   (:require [clojure.data.json :as json]
-            [clj-http.client :as client]))
+            [clj-http.client :as client]
+            [tech.v3.dataset :as ds]))
 
 (def atom ({:used-weight 0
 :used-weight-1m 0 }))
@@ -58,15 +59,22 @@
           (assoc :x-mbx-used-weight (get-in response [:headers "x-mbx-used-weight"])
                  :x-mbx-used-weight-1m (get-in response [:headers "x-mbx-used-weight-1m"])
                  :status (:status response)
-                 :body  (json/read-str (:body response) )))))
+                 :body  (json/read-str (:body response))))))
 
 
   ;;get 5m klines for ETHUSDT
   (def test-data (request-klines "https://api.binance.com/api/v3/klines" "ETHUSDT" "1m"))
 
+  ;;more json parsing to fit dataset
+  
+  (map #(println %) (:body test-data)) 
 
 
-  )
+  ;; create dataset from body of test-data
+   (ds/->dataset [{:opentime 231321 :close 3291}, {:opentime 23190 :close 33}])
+
+
+   )
 
  
  
