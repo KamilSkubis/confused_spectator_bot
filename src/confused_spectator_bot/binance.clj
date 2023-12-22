@@ -1,5 +1,6 @@
 (ns confused-spectator-bot.binance
   (:require [clojure.data.json :as json]
+            [clojure.string]
             [clj-http.client :as client]
             [tech.v3.dataset :as ds]))
 
@@ -29,7 +30,15 @@
 
 
 
-
+(defn request-klines [endpoint symbol timeframe]
+  (let [data {}
+        url (str endpoint "?symbol=" (clojure.string/upper-case symbol) "&interval=" timeframe)
+        response (client/get url)]
+    (-> data
+        (assoc :x-mbx-used-weight (get-in response [:headers "x-mbx-used-weight"])
+               :x-mbx-used-weight-1m (get-in response [:headers "x-mbx-used-weight-1m"])
+               :status (:status response)
+               :body  (json/read-str (:body response))))))
 
 (comment
 
@@ -49,21 +58,9 @@
   (def test-ticker "ETHUSDT")
   (json/read-str (:body (client/get "https://api.binance.com/api/v3/time")))
 
-
-  ;;use UpperCase for symbols
-  (defn request-klines [endpoint symbol timeframe]
-    (let [data {}
-          url (str endpoint "?symbol=" symbol "&interval=" timeframe)
-          response (client/get url)]
-      (-> data
-          (assoc :x-mbx-used-weight (get-in response [:headers "x-mbx-used-weight"])
-                 :x-mbx-used-weight-1m (get-in response [:headers "x-mbx-used-weight-1m"])
-                 :status (:status response)
-                 :body  (json/read-str (:body response))))))
-
-
+  
   ;;get 5m klines for ETHUSDT
-  (def test-data (request-klines "https://api.binance.com/api/v3/klines" "ETHUSDT" "1m"))
+  (def test-data (request-klines "https://api.binance.com/api/v3/klines" "ethusdt" "1m"))
 
   ;;more json parsing to fit dataset
   
